@@ -6,12 +6,13 @@ import {AddContainerComponent} from './AddContainer';
 import {AddItemComponent} from './AddItem';
 
 function App() {
-  const roomListUrl = 'http://127.0.0.1:5000/list_rooms';
-  const containerListUrl = 'http://127.0.0.1:5000/list_containers';
-  const itemListUrl = 'http://127.0.0.1:5000/list_items';
-  const roomUrl = 'http://127.0.0.1:5000/room/';
-  const containerUrl = 'http://127.0.0.1:5000/container/';
-  const itemUrl = 'http://127.0.0.1:5000/item/';
+  const baseurl = "https://home-inventory-project-be.herokuapp.com/"
+  const roomListUrl = baseurl + 'list_rooms';
+  const containerListUrl = baseurl + 'list_containers';
+  const itemListUrl = baseurl + 'list_items';
+  const roomUrl = baseurl + 'room/';
+  const containerUrl = baseurl + 'container/';
+  const itemUrl = baseurl + 'item/';
   
   const [isLoading, setLoading] = useState(false);
   
