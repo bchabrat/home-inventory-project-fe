@@ -1,4 +1,4 @@
-import close_icon from './close.png';
+import close_icon from '../../Static/close.png';
 
 export const DeleteIcon = (props) =>{
 
@@ -21,10 +21,6 @@ export const DeleteIcon = (props) =>{
                 alert(data.message);
             }
         })
-        
-        
-        
-
 
         
     }
