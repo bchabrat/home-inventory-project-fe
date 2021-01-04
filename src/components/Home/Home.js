@@ -13,12 +13,13 @@ function Home() {
   const roomListUrl = API_BASE_URL + 'list_rooms';
   const containerListUrl = API_BASE_URL + 'list_containers';
   const itemListUrl = API_BASE_URL + 'list_items';
-  const roomUrl = API_BASE_URL + 'room/';
-  const containerUrl = API_BASE_URL + 'container/';
-  const itemUrl = API_BASE_URL + 'item/';
+  const roomUrl = API_BASE_URL + 'room';
+  const containerUrl = API_BASE_URL + 'container';
+  const itemUrl = API_BASE_URL + 'item';
   
+  const [listChanged, setListChanged] = useState(false); 
   const [isLoading, setLoading] = useState(false);
-  
+
   const [RoomList, setRoomList] = useState([]);
   const [ContainerList, setContainerList] = useState([]);
   const [ItemList, setItemList] = useState([]);
@@ -56,7 +57,7 @@ function Home() {
       .catch(err => {
         alert(err.message); 
       });    
-    },[]);
+    },[listChanged]);
   
   useEffect(() => {
     setLoading(true);
@@ -68,7 +69,7 @@ function Home() {
       setLoading(false);}).catch(err => {
         alert(err.message); 
       });
-    },[]);
+    },[listChanged]);
   
   useEffect(() => {
     setLoading(true);
@@ -81,7 +82,7 @@ function Home() {
         alert(err.message); 
       });
       
-    },[]);
+    },[listChanged]);
 
   
   if (isLoading) return <p>loading...please wait </p>;
@@ -91,24 +92,24 @@ function Home() {
     <div className="App">
               <header className="App-header">
               <div>
-              <ListComponent ItemsToList={RoomList} DeleteUrl={roomUrl} setList={setRoomList}/>         
+              <ListComponent listChanged= {listChanged} setListChanged={setListChanged} ItemsToList={RoomList} DeleteUrl={roomUrl} setList={setRoomList}/>         
               <button onClick={toggleRoomPopup}>Add a room</button>
               </div>
               <div>
-              <ListComponent ItemsToList={ContainerList} DeleteUrl={containerUrl} setList={setContainerList}/> 
+              <ListComponent listChanged= {listChanged} setListChanged={setListChanged} ItemsToList={ContainerList} DeleteUrl={containerUrl} setList={setContainerList}/> 
               <button onClick={toggleContainerPopup}>Add a container</button>
               </div>
               <div>
-              <ListComponent ItemsToList={ItemList} DeleteUrl={itemUrl} setList={setItemList}/> 
+              <ListComponent listChanged= {listChanged} setListChanged={setListChanged} ItemsToList={ItemList} DeleteUrl={itemUrl} setList={setItemList}/> 
               <button onClick={toggleItemPopup}>Add an item</button>
               </div>
               {/* <MainComponent List={RoomList} setList={setRoomList} type="Room" className="RoomComponent" url='http://127.0.0.1:5000/room'/>
               <MainComponent List={ContainerList} setList={setContainerList} type="Container" className="ContainerComponent" url='http://127.0.0.1:5000/container'/>
               <MainComponent List={ItemList} setList={setItemList} type="Item" className="ItemComponent" url='http://127.0.0.1:5000/item'/> */}
             </header>
-              {ShowRoomAdd ? <AddRoomComponent url={roomUrl} List={RoomList} setList={setRoomList}/> : null }
-              {ShowContainerAdd ? <AddContainerComponent url={containerUrl} RoomList={RoomList} ContainerList={ContainerList} setList={setContainerList}/> : null }
-              {ShowItemAdd ? <AddItemComponent url={itemUrl} RoomList={RoomList} ContainerList={ContainerList} ItemList={ItemList} setList={setItemList}/> : null }
+              {ShowRoomAdd ? <AddRoomComponent listChanged= {listChanged} setListChanged={setListChanged} url={roomUrl} List={RoomList} setList={setRoomList}/> : null }
+              {ShowContainerAdd ? <AddContainerComponent listChanged= {listChanged} setListChanged={setListChanged} url={containerUrl} RoomList={RoomList} ContainerList={ContainerList} setList={setContainerList}/> : null }
+              {ShowItemAdd ? <AddItemComponent listChanged= {listChanged} setListChanged={setListChanged} url={itemUrl} RoomList={RoomList} ContainerList={ContainerList} ItemList={ItemList} setList={setItemList}/> : null }
     </div>    
   );
 };

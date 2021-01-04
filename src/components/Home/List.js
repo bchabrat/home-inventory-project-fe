@@ -22,7 +22,7 @@ export const ListComponent = (props) => {
           return (
             <li key={element.name} className='list'>
               <span className='repo-text'>{textToDisplay}</span>
-              <DeleteIcon DeleteUrl={DeleteUrl} toUpdate={element.name} List={props.ItemsToList} setList={props.setList}/>
+              <DeleteIcon listChanged={props.listChanged} setListChanged={props.setListChanged} DeleteUrl={DeleteUrl} toUpdate={element} List={props.ItemsToList} setList={props.setList}/>
             </li>
           );
         })}

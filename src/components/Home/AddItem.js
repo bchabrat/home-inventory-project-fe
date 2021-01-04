@@ -1,4 +1,5 @@
 import {useState } from 'react';
+import axios from 'axios';
 
 export const AddItemComponent = (props) => {
     const [input, setInput] = useState("");
@@ -20,23 +21,22 @@ export const AddItemComponent = (props) => {
     const handleAdd = (e) =>{
         e.preventDefault();
         if (input) {
-            const body="room_name=" + selectedRoom + (selectedContainer!="None" ? "&container_name="+selectedContainer:"");
-            fetch(props.url + input + "?" + body , {method:'POST'})
+            const payload={"name":input,"room_name":selectedRoom, "container_name":(selectedContainer!=="None" ? selectedContainer:"")};
+            axios.post(props.url, payload,{headers: {
+                'Authorization': localStorage.getItem('ACCESS_TOKEN_NAME')
+              }
+            })
             .then((response)=>{
-                if (response.status==200){
-                    props.setList([...props.ItemList,{name:input,room_name:selectedRoom,container_name:selectedContainer!="None" ? selectedContainer:""}]) 
-                }
-                else{
-                    return(response.json())
-                  }
-                })
-                .then((data)=> {
-                  if (data) {
-                    alert(data.message)  
-                  }
-                })
+                    props.setListChanged(!props.listChanged)
+            })
+            .catch((err)=>{
+                    alert(err.message)  
+            }) 
         }
-    }
+        else{alert("please enter a name")}
+      }
+        
+    
     
     
     return(

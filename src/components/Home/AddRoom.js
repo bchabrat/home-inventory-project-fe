@@ -1,4 +1,5 @@
 import {useState } from 'react';
+import axios from 'axios';
 
 export const AddRoomComponent = (props) => {
     const [input, setInput] = useState("");
@@ -10,22 +11,20 @@ export const AddRoomComponent = (props) => {
     const handleAdd = (e) =>{
         e.preventDefault();
         if (input) {
-            fetch(props.url + input, {method:'POST'})
-            .then((response)=>{
-              if (response.status==200){
-                props.setList([...props.List,{name:input}])
-              }
-              else{
-                return(response.json())
+            axios.post(props.url, {'name':input}, {
+              headers: {
+                'Authorization': localStorage.getItem('ACCESS_TOKEN_NAME')
               }
             })
-            .then((data)=> {
-              if (data) {
-                alert(data.message)  
-              }
+            .then((response)=>{
+              props.setListChanged(!props.listChanged)
+            })
+            .catch((err)=> {
+                alert(err.message)  
             })
                    
         }
+        else{alert("please enter a name")}
     } 
     return(
         <form onSubmit={handleAdd} className="Form"> 

@@ -1,27 +1,27 @@
 import close_icon from '../../Static/close.png';
+import axios from 'axios';
 
 export const DeleteIcon = (props) =>{
 
     const handleDelete = (e) => {
         const updatedList = props.List.filter(function(object,index,arr){
-            return object.name != props.toUpdate
+            return object.id !== props.toUpdate
         });
+        console.log(updatedList)
         
-        fetch(props.DeleteUrl+props.toUpdate, {method:"DELETE"})
-        .then(function(response) {
-                if(response.status==200){
-                    props.setList(updatedList);
-                }
-                else{
-                    return response.json();
-                }
+        axios.delete(props.DeleteUrl,
+        {
+            headers: {
+              'Authorization': localStorage.getItem('ACCESS_TOKEN_NAME')
+            },
+            data:
+                {"id":props.toUpdate.id,"name":props.toUpdate.name}
+          })
+        .then(res => {
+                    props.setListChanged(!props.listChanged);
+                
         })
-        .then((data)=>{
-            if(data){
-                alert(data.message);
-            }
-        })
-
+        .catch(err =>alert(err.message))
         
     }
     return(
