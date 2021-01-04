@@ -11,11 +11,17 @@ export const AddContainerComponent = (props) => {
     }
 
     const handleRoomSelectionChange = (e) => {
-        setSelectedRoom(e.currentTarget.value);
+        var index = e.target.selectedIndex;
+        var optionElement = e.target.childNodes[index]
+        var option =  optionElement.getAttribute('data-id');
+        setSelectedRoom(option);
     }
 
     const handleContainerSelectionChange = (e) => {
-        setSelectedContainer(e.currentTarget.value);
+        var index = e.target.selectedIndex;
+        var optionElement = e.target.childNodes[index]
+        var option =  optionElement.getAttribute('data-id');
+        setSelectedContainer(option);
     }
 
     const handleAdd = (e) =>{
@@ -47,7 +53,7 @@ export const AddContainerComponent = (props) => {
             <option>None</option>
             {props.ContainerList.map((element) => {
             return (
-            <option>
+            <option data-id={element.id}>
                 {element.name}
             </option>
             );
