@@ -3,8 +3,8 @@ import axios from 'axios';
 
 export const AddContainerComponent = (props) => {
     const [input, setInput] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState(props.RoomList[0]['name']);
-    const [selectedContainer, setSelectedContainer] = useState("None");
+    const [selectedRoom, setSelectedRoom] = useState(props.RoomList[0]['id']);
+    const [selectedContainer, setSelectedContainer] = useState(0);
     
     const handleInputChange = (e) => {
         setInput(e.currentTarget.value);
@@ -14,20 +14,27 @@ export const AddContainerComponent = (props) => {
         var index = e.target.selectedIndex;
         var optionElement = e.target.childNodes[index]
         var option =  optionElement.getAttribute('data-id');
-        setSelectedRoom(option);
+        setSelectedRoom(parseInt(option));
     }
 
     const handleContainerSelectionChange = (e) => {
         var index = e.target.selectedIndex;
         var optionElement = e.target.childNodes[index]
         var option =  optionElement.getAttribute('data-id');
-        setSelectedContainer(option);
+        setSelectedContainer(parseInt(option));
     }
 
     const handleAdd = (e) =>{
         e.preventDefault();
         if (input) {
-            const payload={"name":input,"room_name":selectedRoom, "container_name":(selectedContainer!=="None" ? selectedContainer:"")};
+            let payload = {}
+            if (selectedContainer){
+                payload={"name":input,"room_id":selectedRoom,"container_id":selectedContainer}
+            }
+            else{
+                payload={"name":input,"room_id":selectedRoom}
+            }
+            
             axios.post(props.url, payload,{headers: {
                 'Authorization': localStorage.getItem('ACCESS_TOKEN_NAME')
               }
@@ -45,12 +52,12 @@ export const AddContainerComponent = (props) => {
     
     return(
         <form onSubmit={handleAdd} className="Form"> 
-        <h1>Add a container</h1>
+        <h1>Add an item or container</h1>
         <label>name</label>
         <input name="name" type="text"  onChange={handleInputChange} />
         <label>Container</label>
         <select name="container" type="text" onChange={handleContainerSelectionChange}>
-            <option>None</option>
+            <option data-id="0" >None</option>
             {props.ContainerList.map((element) => {
             return (
             <option data-id={element.id}>
@@ -63,7 +70,7 @@ export const AddContainerComponent = (props) => {
         <select name="room" type="text" onChange={handleRoomSelectionChange}>
             {props.RoomList.map((element) => {
             return (
-            <option>
+            <option data-id={element.id}>
                 {element.name}
             </option>
             );

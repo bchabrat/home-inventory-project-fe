@@ -11,6 +11,7 @@ function Header(props) {
     if(props.location.pathname === '/') {
         title = 'Welcome'
     }
+
     function renderLogout() {
         if(props.location.pathname === '/home'){
             return(
@@ -21,7 +22,7 @@ function Header(props) {
         }
     }
     function handleLogout() {
-        localStorage.removeItem(ACCESS_TOKEN_NAME)
+        localStorage.removeItem("ACCESS_TOKEN_NAME")
         props.history.push('/login')
     }
     return(

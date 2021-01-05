@@ -1,9 +1,9 @@
 import './Home.css';
 import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router'
 import {ListComponent} from './List';
 import {AddRoomComponent} from './AddRoom';
 import {AddContainerComponent} from './AddContainer';
-import {AddItemComponent} from './AddItem';
 import {API_BASE_URL} from '../../constants/constants';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ function Home() {
   const roomUrl = API_BASE_URL + 'room';
   const containerUrl = API_BASE_URL + 'container';
   const itemUrl = API_BASE_URL + 'item';
+  const [failedAuth,setFailedAuth] = useState(false)
   
   const [listChanged, setListChanged] = useState(false); 
   const [isLoading, setLoading] = useState(false);
@@ -46,6 +47,7 @@ function Home() {
     setShowRoomAdd(false);
   };
 
+
   useEffect(() => {
     setLoading(true);
     const response = axios.get(roomListUrl,{
@@ -55,7 +57,10 @@ function Home() {
     }).then(res=>{setRoomList(res.data);
       setLoading(false);})
       .catch(err => {
-        alert(err.message); 
+        if (err.response.status === 401){
+          setFailedAuth(true)
+        }
+        else{alert(err.message); } 
       });    
     },[listChanged]);
   
@@ -67,7 +72,10 @@ function Home() {
       }
     }).then(res=>{setContainerList(res.data);
       setLoading(false);}).catch(err => {
-        alert(err.message); 
+        if (err.response.status === 401){
+          setFailedAuth(true)
+        }
+        else{alert(err.message); }
       });
     },[listChanged]);
   
@@ -79,12 +87,16 @@ function Home() {
       }
     }).then(res=>{setItemList(res.data);
       setLoading(false);}).catch(err => {
-        alert(err.message); 
+        if (err.response.status === 401){
+          setFailedAuth(true) 
+        }
+      else{alert(err.message); }
+        
       });
       
     },[listChanged]);
 
-  
+  if (failedAuth) return <Redirect to="/login" />;
   if (isLoading) return <p>loading...please wait </p>;
 
   return (
@@ -109,7 +121,7 @@ function Home() {
             </header>
               {ShowRoomAdd ? <AddRoomComponent listChanged= {listChanged} setListChanged={setListChanged} url={roomUrl} List={RoomList} setList={setRoomList}/> : null }
               {ShowContainerAdd ? <AddContainerComponent listChanged= {listChanged} setListChanged={setListChanged} url={containerUrl} RoomList={RoomList} ContainerList={ContainerList} setList={setContainerList}/> : null }
-              {ShowItemAdd ? <AddItemComponent listChanged= {listChanged} setListChanged={setListChanged} url={itemUrl} RoomList={RoomList} ContainerList={ContainerList} ItemList={ItemList} setList={setItemList}/> : null }
+              {ShowItemAdd ? <AddContainerComponent listChanged= {listChanged} setListChanged={setListChanged} url={itemUrl} RoomList={RoomList} ContainerList={ContainerList} ItemList={ItemList} setList={setItemList}/> : null }
     </div>    
   );
 };

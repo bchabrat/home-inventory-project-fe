@@ -9,15 +9,18 @@ export const ListComponent = (props) => {
     return (
       <ul>
         {elementToList.map((element) => {
+          console.log("element",element)
           let textToDisplay = "" 
-          if (element.room_name) {
-            textToDisplay = element.name + " located in the " + element.room_name;
-            if(element.container_name){
-              textToDisplay = element.name + " located in " + element.container_name + " in the " + element.room_name;
-            }
+          if (element.name){
+            textToDisplay = element.name;
           }
           else{
-            textToDisplay = element.name;
+            if(element.container){
+              textToDisplay = element.element.name + " located in " + element.container.name + " in the " + element.room.name;
+            }
+            else{
+              textToDisplay = element.element.name + " located in the " + element.room.name; 
+            }
           }
           return (
             <li key={element.name} className='list'>

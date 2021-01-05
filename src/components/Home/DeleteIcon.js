@@ -4,10 +4,6 @@ import axios from 'axios';
 export const DeleteIcon = (props) =>{
 
     const handleDelete = (e) => {
-        const updatedList = props.List.filter(function(object,index,arr){
-            return object.id !== props.toUpdate
-        });
-        console.log(updatedList)
         
         axios.delete(props.DeleteUrl,
         {
